@@ -30,7 +30,10 @@ const Login = ({navigation}) => {
               <Text>Password:</Text>
               <TextInput style={styles.TextInput} />
             </View>
-            <Button title="Sign in" />
+            <Button
+              title="Sign in"
+              onPress={() => navigation.navigate('ExpenseList')}
+            />
           </View>
         </View>
       </ScrollView>

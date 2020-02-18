@@ -12,6 +12,7 @@ import React from 'react';
 
 import Login from './components/login';
 import SignUp from './components/signUp';
+import ExpenseList from './components/expenseList';
 
 const App = () => {
   const Stack = createStackNavigator();
@@ -20,6 +21,7 @@ const App = () => {
       <Stack.Navigator initialRouteName="HomeScreen">
         <Stack.Screen name="HomeScreen" component={Login} />
         <Stack.Screen name="SignUp" component={SignUp} />
+        <Stack.Screen name="ExpenseList" component={ExpenseList} />
       </Stack.Navigator>
     </NavigationContainer>
   );

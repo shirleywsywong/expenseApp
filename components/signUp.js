@@ -27,7 +27,10 @@ const SignUp = ({navigation}) => {
             <Text>Password:</Text>
             <TextInput style={styles.TextInput} />
           </View>
-          <Button title="Create an account" />
+          <Button
+            title="Create an account"
+            onPress={() => navigation.navigate('ExpenseList')}
+          />
         </View>
       </ScrollView>
     </SafeAreaView>

@@ -13,6 +13,8 @@ import React from 'react';
 import Login from './components/login';
 import SignUp from './components/signUp';
 import ExpenseList from './components/expenseList';
+import ExpenseItem from './components/expenseItem';
+import ExportCSV from './components/exportCSV';
 
 const App = () => {
   const Stack = createStackNavigator();
@@ -22,6 +24,8 @@ const App = () => {
         <Stack.Screen name="HomeScreen" component={Login} />
         <Stack.Screen name="SignUp" component={SignUp} />
         <Stack.Screen name="ExpenseList" component={ExpenseList} />
+        <Stack.Screen name="ExpenseItem" component={ExpenseItem} />
+        <Stack.Screen name="ExportCSV" component={ExportCSV} />
       </Stack.Navigator>
     </NavigationContainer>
   );

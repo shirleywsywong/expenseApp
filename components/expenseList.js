@@ -8,8 +8,13 @@ import {
   StatusBar,
   Button,
   TextInput,
-  CheckBox,
+  Image,
 } from 'react-native';
+import RadioForm, {
+  RadioButton,
+  RadioButtonInput,
+  RadioButtonLabel,
+} from 'react-native-simple-radio-button';
 
 class ExpenseList extends Component {
   constructor({navigation}) {
@@ -19,24 +24,51 @@ class ExpenseList extends Component {
     };
   }
 
-  toggleCheckBox = () => {
-    this.setState({
-      isChecked: !this.state.isChecked,
-    });
-  };
+  radio_props = [
+    {label: 'param1', value: 0, amount: 45.7},
+    {label: 'param2', value: 1, amount: 18.67},
+  ];
 
   render() {
     return (
       <SafeAreaView>
         <ScrollView contentInsetAdjustmentBehavior="automatic">
           <View style={styles.spacing}>
+            <View style={styles.spacing}>
+              <Button
+                title="Add new item"
+                onPress={() => this.props.navigation.navigate('ExpenseItem')}
+              />
+            </View>
+            <View style={styles.spacing}>
+              <Button
+                title="Edit item"
+                onPress={() => this.props.navigation.navigate('ExpenseItem')}
+              />
+            </View>
+            <View style={styles.spacing}>
+              <Button
+                title="Delete item"
+                onPress={() => {
+                  alert('Are you sure?');
+                }}
+              />
+            </View>
+            <View style={styles.spacing}>
+              <Button
+                title="Export selected"
+                onPress={() => this.props.navigation.navigate('ExportCSV')}
+              />
+            </View>
             <Text>Add an expense item</Text>
             <View style={styles.checkboxGroup}>
-              <CheckBox
-                value={this.state.isChecked}
-                onChange={() => this.toggleCheckBox()}
+              <RadioForm
+                radio_props={this.radio_props}
+                initial={0}
+                onPress={value => {
+                  this.setState({value: value});
+                }}
               />
-              <Text styles={styles.checkboxLabel}>Item</Text>
             </View>
           </View>
         </ScrollView>
@@ -60,6 +92,10 @@ const styles = StyleSheet.create({
   },
   checkboxLabel: {
     padding: 5,
+  },
+  iconAddItem: {
+    height: 50,
+    width: 50,
   },
 });
 

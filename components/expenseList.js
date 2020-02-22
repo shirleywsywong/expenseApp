@@ -35,10 +35,11 @@ class ExpenseList extends Component {
         <ScrollView contentInsetAdjustmentBehavior="automatic">
           <View style={styles.spacing}>
             <View style={styles.spacing}>
-              <Button
-                title="Add new item"
-                onPress={() => this.props.navigation.navigate('ExpenseItem')}
-              />
+              <TouchableOpacity
+                onPress={this.props.navigation.navigate('ExpenseItem')}>
+                {/* {iconAdd} */}
+                <Text>+</Text>
+              </TouchableOpacity>
             </View>
             <View style={styles.spacing}>
               <Button

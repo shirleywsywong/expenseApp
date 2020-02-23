@@ -6,12 +6,8 @@ import {
   View,
   Text,
   TouchableOpacity,
+  CheckBox,
 } from 'react-native';
-import RadioForm, {
-  RadioButton,
-  RadioButtonInput,
-  RadioButtonLabel,
-} from 'react-native-simple-radio-button';
 import IconFeather from 'react-native-vector-icons/Feather';
 import IconMaterial from 'react-native-vector-icons/MaterialCommunityIcons';
 
@@ -19,20 +15,25 @@ class ExpenseList extends Component {
   constructor({navigation}) {
     super();
     this.state = {
-      isChecked: false,
+      expenseGroup: [],
     };
   }
-
-  radio_props = [
-    {label: 'param1', value: 0, amount: 45.7},
-    {label: 'param2', value: 1, amount: 18.67},
-  ];
 
   iconAdd = (<IconFeather name="plus-square" size={50} color="#109" />);
   iconEdit = (<IconFeather name="edit" size={45} color="#109" />);
   iconTrash = (<IconFeather name="trash-2" size={45} color="#109" />);
   iconExport = (<IconMaterial name="export" size={50} color="#109" />);
 
+  toggleSelect = () => {
+    //const expenseObj = {
+    //  value: value,
+    //  date: date,
+    //  name: name,
+    //  amount: amount
+    //}
+    //this.setState({expenseObj})
+  };
+  //for each item in the list, create a checkbox component where value = each.isSelect and onChange calls toggleSelect, which takes an argument of the list index
   render() {
     return (
       <SafeAreaView>
@@ -64,13 +65,8 @@ class ExpenseList extends Component {
             </View>
             <Text>Add an expense item</Text>
             <View style={styles.checkboxGroup}>
-              <RadioForm
-                radio_props={this.radio_props}
-                initial={0}
-                onPress={value => {
-                  this.setState({value: value});
-                }}
-              />
+              <CheckBox value={false} onChange={() => this.toggleSelect()} />
+              <Text style={styles.checkBoxLabel}>Expense Item</Text>
             </View>
           </View>
         </ScrollView>

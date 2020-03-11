@@ -6,7 +6,8 @@ import {
   View,
   Text,
   TouchableOpacity,
-  CheckBox,
+  FlatList,
+  Switch,
 } from 'react-native';
 import IconFeather from 'react-native-vector-icons/Feather';
 import IconMaterial from 'react-native-vector-icons/MaterialCommunityIcons';
@@ -19,6 +20,23 @@ class ExpenseList extends Component {
     };
   }
 
+  DATA = [
+    {
+      id: 'bd7acbea-c1b1-46c2-aed5-3ad53abb28ba',
+      isSelected: true,
+      date: 'Feb 1, 2019',
+      name: 'Lunch',
+      amount: 15,
+    },
+    {
+      id: '3ac68afc-c605-48d3-a4f8-fbd91aa97f63',
+      isSelected: false,
+      date: 'Feb 7, 2019',
+      name: 'Go transit',
+      amount: 15,
+    },
+  ];
+
   iconAdd = (<IconFeather name="plus-square" size={50} color="#109" />);
   iconEdit = (<IconFeather name="edit" size={45} color="#109" />);
   iconTrash = (<IconFeather name="trash-2" size={45} color="#109" />);
@@ -26,7 +44,7 @@ class ExpenseList extends Component {
 
   toggleSelect = () => {
     //const expenseObj = {
-    //  value: value,
+    //  isSelected: bool,
     //  date: date,
     //  name: name,
     //  amount: amount
@@ -65,7 +83,7 @@ class ExpenseList extends Component {
             </View>
             <Text>Add an expense item</Text>
             <View style={styles.checkboxGroup}>
-              <CheckBox value={false} onChange={() => this.toggleSelect()} />
+              <Switch style={styles.switch} />
               <Text style={styles.checkBoxLabel}>Expense Item</Text>
             </View>
           </View>
@@ -78,6 +96,11 @@ class ExpenseList extends Component {
 const styles = StyleSheet.create({
   spacing: {
     margin: 10,
+  },
+  switch: {
+    borderRadius: 40,
+    borderWidth: 50,
+    borderColor: '#d6d7da',
   },
   TextInput: {
     height: 40,

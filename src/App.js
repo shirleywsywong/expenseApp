@@ -6,8 +6,8 @@ import 'react-native-gesture-handler';
  * @format
  * @flow
  */
-import {NavigationContainer} from '@react-navigation/native';
-import {createStackNavigator} from '@react-navigation/stack';
+import { NavigationContainer } from '@react-navigation/native';
+import { createStackNavigator } from '@react-navigation/stack';
 import React from 'react';
 
 import Login from './components/login';
@@ -15,6 +15,9 @@ import SignUp from './components/signUp';
 import ExpenseList from './components/expenseList';
 import ExpenseItem from './components/expenseItem';
 import ExportCSV from './components/exportCSV';
+
+import { getToken } from './utils/token';
+
 
 const App = () => {
   const Stack = createStackNavigator();

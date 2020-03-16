@@ -1,4 +1,4 @@
-import React, {useState} from 'react';
+import React, { useState } from 'react';
 import {
   SafeAreaView,
   StyleSheet,
@@ -10,15 +10,11 @@ import {
   TextInput,
 } from 'react-native';
 
-const SignUp = ({navigation}) => {
+const SignUp = ({ navigation }) => {
   return (
     <SafeAreaView>
       <ScrollView contentInsetAdjustmentBehavior="automatic">
         <View style={styles.spacing}>
-          <View style={styles.spacing}>
-            <Text>Name:</Text>
-            <TextInput style={styles.TextInput} />
-          </View>
           <View style={styles.spacing}>
             <Text>Email:</Text>
             <TextInput style={styles.TextInput} />

@@ -18,8 +18,8 @@ mongoose
   })
   .then(() => {
     //talk to express through port 8080
-    app.listen("8080", () => {
-      console.log("8080")
+    app.listen("8000", () => {
+      console.log("8000")
     })
   })
 

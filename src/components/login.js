@@ -1,7 +1,6 @@
 import React, { Component } from 'react';
 import {
   SafeAreaView,
-  StyleSheet,
   ScrollView,
   View,
   Text,
@@ -9,6 +8,7 @@ import {
   TextInput,
   TouchableOpacity
 } from 'react-native';
+import styles from '../utils/stylesheet'
 
 //hello@hello.com
 //abc123
@@ -19,6 +19,7 @@ class Login extends Component {
     this.state = {
       email: "",
       password: "",
+      error: "",
     }
   }
 
@@ -32,18 +33,38 @@ class Login extends Component {
     this.setState({ password: text })
   }
 
+  //\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\
+  // compare password function is not defined in userModel yet!! \\
+  //\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\
+
   submitFromButton = async () => {
-    console.log(`user hit submit button`, this.state.email, this.state.password)
-    const { email, password } = this.state
-    const response = await fetch('http://192.168.0.162:8000/user/', {
-      method: "POST",
-      headers: {
-        "Content-Type": "application/json",
-      },
-      body: JSON.stringify({ email, password }),
-    })
-    const data = await response.json();
-    console.log(data)
+    try {
+      const { email, password } = this.state
+
+      //make a post request to login endpoint
+      const response = await fetch('http://192.168.0.162:8000/user/login', {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify({ email, password }),
+      })
+      const data = await response.json();
+
+      //if login is not successful, throw a new error
+      if (!response.ok) {
+        throw new Error(data.message)
+      }
+
+      //flag to proceed to next screen
+      return true;
+    } catch (err) {
+      //err messages are from userRoutes 
+      this.setState({ error: err.message })
+
+      // flag to stop going to next screen
+      return false;
+    }
   }
 
   render() {
@@ -52,10 +73,10 @@ class Login extends Component {
         <ScrollView contentInsetAdjustmentBehavior="automatic">
           <View>
             <View style={styles.title}>
-              <Text style={styles.appName}>App Name</Text>
+              <Text style={styles.appName}>Happy Reimbursary!</Text>
               <Button
                 title="New user? Sign Up!"
-                onPress={() => navigation.navigate('SignUp')}
+                onPress={() => this.props.navigation.navigate('SignUp')}
               />
             </View>
             <View style={styles.spacing}>
@@ -75,23 +96,17 @@ class Login extends Component {
                   onChangeText={(text) => this.enteringPassword(text)}
                 />
               </View>
-              {/* <TouchableOpacity
-                style={styles.fakeButton}
-                onPress={() => {
-                  this.submitFromButton()
-                  // this.submitFromButton.bind(this)
-                  this.props.navigation.navigate('ExpenseList')
-                }}
-              >
-                <Text style={styles.buttonText}>Sign in</Text>
-              </TouchableOpacity> */}
               <Button
                 title="Sign in"
-                onPress={() => {
-                  this.submitFromButton()
-                  this.props.navigation.navigate('ExpenseList')
+                onPress={async () => {
+                  if (await this.submitFromButton()) {
+                    this.props.navigation.navigate('ExpenseList')
+                  }
                 }}
               />
+              {this.state.error
+                ? <Text>{this.state.error}</Text>
+                : null}
             </View>
           </View>
         </ScrollView>
@@ -99,38 +114,5 @@ class Login extends Component {
     );
   };
 }
-
-const styles = StyleSheet.create({
-  spacing: {
-    margin: 20,
-  },
-  title: {
-    padding: 20,
-    backgroundColor: '#eee',
-  },
-  appName: {
-    fontSize: 40,
-    textAlign: 'center',
-    margin: 20,
-  },
-  TextInput: {
-    height: 40,
-    borderColor: 'gray',
-    borderWidth: 1,
-  },
-  fakeButton: {
-    backgroundColor: '#2196F3',
-    width: 100,
-    height: 50,
-    justifyContent: 'center',
-    alignItems: 'center',
-    margin: 10,
-  },
-  buttonText: {
-    color: 'white',
-    fontSize: 20,
-    fontWeight: 'bold'
-  },
-});
 
 export default Login;

@@ -29,6 +29,10 @@ userSchema.pre('save', async function (next) {
   }
 })
 
-
+//since pw is encrypted, we need to use bcrypt's .compare function to match the password
+userSchema.methods.comparePasswords = function (password) {
+  const user = this;
+  return bcrypt.compare(password, user.password);
+}
 
 module.exports = mongoose.model("User", userSchema)

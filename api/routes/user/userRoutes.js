@@ -46,9 +46,6 @@ userRouter.route("/")
     }
   });
 
-//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\
-// compare password function is not defined in userModel yet!! \\
-//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\
 userRouter.route("/login")
   .post(async (req, res) => {
     const { email, password } = req.body;
@@ -60,28 +57,31 @@ userRouter.route("/login")
     }
 
     if (!password || password === "") {
-      res.status(400).json({ message: "password must be provided" });
+      res.status(400).json({ message: "Password must be provided" });
       return;
     }
 
-    //now that we verified all the input fields are complete... 
     try {
       //if the user doesn't already exist, return another error
       const existingUser = await findUserByEmail(email);
       if (!existingUser) {
-        res.status(400).json({ message: `email ${email} doesn't exist` })
+        res.status(400).json({ message: `Email ${email} doesn't exist. Please sign up for an account.` })
         return
       }
 
-      const token = createToken({
-        email: existingUser.email,
-        id: existingUser._id,
-      })
+      //compare password with what is entered to what is in database to find match, function is written in userModel b/c it already imported bcrypt
+      const isMatch = await existingUser.comparePasswords(password);
+      if (!isMatch) {
+        res.status(400).json({ message: 'Email and password do not match.' });
+        return;
+      }
 
-      res.json({ data: { accessToken: token } })
-      //reply with JWT for the front end (client-side), and client will have to store this in local storage
+      //if the user is a match, create a JWT for the user to continue      
+      const loggedInToken = createToken({ id: existingUser._id });
+
+      res.json({ data: { accessToken: loggedInToken } })
+      //same as with create user, store token to front-end's Async Storage (mobile app specific)
     } catch (err) {
-      //this error handling is for any errors that occur related to the database
       console.log(err)
       res.status(500).json({ message: "internal server error" })
     }

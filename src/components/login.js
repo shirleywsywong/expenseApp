@@ -33,10 +33,6 @@ class Login extends Component {
     this.setState({ password: text })
   }
 
-  //\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\
-  // compare password function is not defined in userModel yet!! \\
-  //\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\
-
   submitFromButton = async () => {
     try {
       const { email, password } = this.state

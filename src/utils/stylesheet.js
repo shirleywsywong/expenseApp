@@ -31,6 +31,10 @@ const styles = StyleSheet.create({
     fontSize: 20,
     fontWeight: 'bold'
   },
+  error: {
+    color: '#af3b40',
+    fontWeight: 'bold'
+  }
 });
 
 export default styles;

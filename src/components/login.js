@@ -100,9 +100,11 @@ class Login extends Component {
                   }
                 }}
               />
-              {this.state.error
-                ? <Text>{this.state.error}</Text>
-                : null}
+              <View style={styles.spacing}>
+                {this.state.error
+                  ? <Text style={styles.error}>{this.state.error}</Text>
+                  : null}
+              </View>
             </View>
           </View>
         </ScrollView>

@@ -83,7 +83,7 @@ userRouter.route("/login")
       //same as with create user, store token to front-end's Async Storage (mobile app specific)
     } catch (err) {
       console.log(err)
-      res.status(500).json({ message: "internal server error" })
+      res.status(500).json({ message: "Internal server error" })
     }
   });
 

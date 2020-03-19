@@ -9,7 +9,7 @@ import {
 } from 'react-native';
 
 import styles from '../utils/stylesheet';
-import { storeToken, getToken } from '../utils/token'
+import { storeToken } from '../utils/token'
 
 class SignUp extends Component {
   constructor(props) {

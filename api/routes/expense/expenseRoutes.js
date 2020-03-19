@@ -3,6 +3,10 @@ const expenseRouter = express.Router();
 const expenseData = require("../../expenseData")
 const Expense = require("./expenseModel");
 const { createExpense } = require("./expenseService")
+const { verifyToken } = require('../../middleware/verifyToken')
+
+// used middleware to assign a user field to the request object to verify if the user is signed in
+expenseRouter.use(verifyToken);
 
 // when I hit /expense, give me the whole list of expenses
 expenseRouter.route("/").get(async (req, res) => {
@@ -10,6 +14,11 @@ expenseRouter.route("/").get(async (req, res) => {
     console.log({ err, docs })
   }));
 });
+
+// 1. to create an expense, need to :
+//- capture the details (date, desc, amount)
+//- assign expense to user
+//- ensure you are authenticated
 
 expenseRouter
   .route("/add-item")

@@ -9,6 +9,7 @@ import {
   TouchableOpacity
 } from 'react-native';
 import styles from '../utils/stylesheet'
+import { storeToken } from '../utils/token'
 
 //hello@hello.com
 //abc123
@@ -52,6 +53,9 @@ class Login extends Component {
         throw new Error(data.message)
       }
 
+      //store access token to async storage 
+      await storeToken(data.data.accessToken)
+
       //flag to proceed to next screen
       return true;
     } catch (err) {
@@ -62,6 +66,8 @@ class Login extends Component {
       return false;
     }
   }
+
+  //user gets jwt back in async storage, expense list renders, and user can add an expense item (expenseRoutes)
 
   render() {
     return (

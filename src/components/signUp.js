@@ -97,7 +97,7 @@ class SignUp extends Component {
               }}
             />
             {this.state.error
-              ? <Text>{this.state.error}</Text>
+              ? <Text style={styles.error}>{this.state.error}</Text>
               : null}
           </View>
         </ScrollView>

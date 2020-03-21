@@ -18,7 +18,9 @@ class ExpenseList extends Component {
   constructor({ navigation }) {
     super();
     this.state = {
+      token: "",
       expenseGroup: [],
+      selectedItemID: "",
     };
   }
 
@@ -35,15 +37,15 @@ class ExpenseList extends Component {
   }
 
   getExpenseData = async () => {
+    const token = await getToken();
+    this.setState({ token })
     try {
-      const token = await getToken();
       const response = await fetch('http://192.168.0.162:8000/expense/', {
         headers: {
           authorization: `Bearer ${token}`,
         }
       })
       const data = await response.json();
-      console.log("expense list", data)
       this.setState({ expenseGroup: data })
     } catch (err) {
       console.log(err)
@@ -51,23 +53,42 @@ class ExpenseList extends Component {
   }
 
   renderListItem = (title) => {
-    console.log("render item: ", title)
     return (
-      <View style={styles.listText}>
+      <TouchableOpacity
+        style={styles.listText}
+        onPress={() => this.onSelect(title.item._id)}
+      >
         <Text style={styles.regularFont}>{title.item.itemDesc}</Text>
-      </View>
+      </TouchableOpacity>
     );
   }
 
-  toggleSelect = () => {
-    //const expenseObj = {
-    //  isSelected: bool,
-    //  date: date,
-    //  name: name,
-    //  amount: amount
-    //}
-    //this.setState({expenseObj})
-  };
+  onSelect = (id) => {
+    this.setState({ selectedItemID: id })
+  }
+
+  handleDelete = async () => {
+    try {
+      const { token, selectedItemID } = this.state;
+
+      //make a delete request to delete note endpoint
+      const response = await fetch(`http://192.168.0.162:8000/expense/${selectedItemID}`, {
+        method: "DELETE",
+
+        //need to send token along in req.headers to let server know you're already authenticated
+        headers: {
+          authorization: `Bearer ${token}`,
+          "Content-Type": "application/json"
+        }
+      })
+      const data = await response.json()
+      console.log("data after delete", data)
+      this.setState({ expenseGroup: data })
+    } catch (err) {
+      console.log(err)
+    }
+  }
+
   //for each item in the list, create a checkbox component where value = each.isSelect and onChange calls toggleSelect, which takes an argument of the list index
   render() {
     return (
@@ -89,6 +110,7 @@ class ExpenseList extends Component {
                 style={styles.spacing}
                 onPress={() => {
                   alert('Are you sure?');
+                  this.handleDelete();
                 }}>
                 <IconFeather>{this.iconTrash}</IconFeather>
               </TouchableOpacity>
@@ -113,14 +135,16 @@ class ExpenseList extends Component {
   }
 }
 
+
+//title object:
 // {
 //   "index": 1,
-//     "item": {
+//   "item": {
 //     "__v": 0,
-//       "_id": "5e64040ed8c4592c68589393",
-//         "amount": "6",
-//           "date": "2020-03-01T05:00:00.000Z",
-//             "itemDesc": "katsu"
+//     "_id": "5e64040ed8c4592c68589393",
+//     "amount": "6",
+//     "date": "2020-03-01T05:00:00.000Z",
+//     "itemDesc": "katsu"
 //   },
 //   "separators": {
 //     "highlight": [Function highlight],

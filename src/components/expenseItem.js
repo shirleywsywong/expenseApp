@@ -32,10 +32,9 @@ class expenseItem extends Component {
   handleSubmit = async () => {
     try {
       const { date, itemDesc, amount } = this.state;
-      console.log(`line 34: ${date}, ${itemDesc}, ${amount}`)
+
       const token = await getToken();
       //make a post request to add note endpoint
-      console.log(token)
       const response = await fetch('http://192.168.0.162:8000/expense/add-item', {
         method: "POST",
 

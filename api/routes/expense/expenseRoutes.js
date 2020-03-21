@@ -80,7 +80,15 @@ expenseRouter
     }
   })
   .delete(async (req, res) => {
-    res.json(await Expense.deleteOne(req.params._id));
+    try {
+      await Expense.deleteOne({ _id: req.params._id });
+      res.json(await Expense.find({}, null, (err, docs) => {
+        console.log({ err, docs })
+      }));
+    } catch (err) {
+      console.log(err)
+      res.status(500).json({ message: "Internal server error" })
+    }
   })
 
 module.exports = expenseRouter;

@@ -11,8 +11,9 @@ import {
 import styles from '../utils/stylesheet'
 import { storeToken } from '../utils/token'
 
-//hello@hello.com
-//abc123
+//sameple users:
+//[hello, abc123]
+//[Q, Q]
 
 class Login extends Component {
   constructor(props) {

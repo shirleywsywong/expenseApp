@@ -8,11 +8,15 @@ const { verifyToken } = require('../../middleware/verifyToken')
 expenseRouter.use(verifyToken);
 
 // when I hit /expense, give me the whole list of expenses
-expenseRouter.route("/").get(async (req, res) => {
-  res.json(await Expense.find({}, null, (err, docs) => {
-    console.log({ err, docs })
-  }));
-});
+expenseRouter.route("/")
+  .get(async (req, res) => {
+    try {
+      res.json(await Expense.find({ userId: req.user.id }));
+    } catch (err) {
+      console.log(err);
+      res.status(500).json({ message: 'Internal server error' });
+    }
+  });
 
 // 1. to create an expense, need to :
 //- capture the details (date, desc, amount)
@@ -74,17 +78,18 @@ expenseRouter
   .put(async (req, res) => {
     try {
       const itemToBeUpdated = await Expense.findById(req.params._id)
-      await itemToBeUpdated.update(req.body)
+      res.json(await itemToBeUpdated.updateOne(req.body))
     } catch (err) {
       throw err
     }
   })
   .delete(async (req, res) => {
     try {
-      await Expense.deleteOne({ _id: req.params._id });
-      res.json(await Expense.find({}, null, (err, docs) => {
-        console.log({ err, docs })
-      }));
+      await Expense.deleteOne({
+        _id: req.params._id,
+        userId: req.user.id
+      });
+      res.json(await Expense.find({ userId: req.user.id }));
     } catch (err) {
       console.log(err)
       res.status(500).json({ message: "Internal server error" })

@@ -30,12 +30,14 @@ class ExpenseList extends Component {
   iconExport = (<IconMaterial name="export" size={50} color="#109" />);
 
   componentDidMount() {
+    //if we move to another screen and come back to it, get data from database again
     const unsubscribe = this.props.navigation.addListener('focus', () => {
       this.getExpenseData()
     });
     return unsubscribe;
   }
 
+  //get user's expense list
   getExpenseData = async () => {
     const token = await getToken();
     this.setState({ token })
@@ -52,6 +54,7 @@ class ExpenseList extends Component {
     }
   }
 
+  //render items from database, and make them into links
   renderListItem = (title) => {
     return (
       <TouchableOpacity
@@ -62,11 +65,12 @@ class ExpenseList extends Component {
       </TouchableOpacity>
     );
   }
-
+  //listen for which item is selected
   onSelect = (id) => {
     this.setState({ selectedItemID: id })
   }
 
+  //when delete icon is pressed, delete the item selected
   handleDelete = async () => {
     try {
       const { token, selectedItemID } = this.state;
@@ -89,7 +93,6 @@ class ExpenseList extends Component {
     }
   }
 
-  //for each item in the list, create a checkbox component where value = each.isSelect and onChange calls toggleSelect, which takes an argument of the list index
   render() {
     return (
       <SafeAreaView>
@@ -98,18 +101,18 @@ class ExpenseList extends Component {
             <View style={styles.iconGroup}>
               <TouchableOpacity
                 style={styles.spacing}
-                onPress={() => this.props.navigation.navigate('ExpenseItem')}>
+                onPress={() => this.props.navigation.navigate('ExpenseItem', {})}>
                 <IconFeather>{this.iconAdd}</IconFeather>
               </TouchableOpacity>
               <TouchableOpacity
                 style={styles.spacing}
-                onPress={() => this.props.navigation.navigate('ExpenseItem')}>
+                onPress={() => this.props.navigation.navigate('ExpenseItem', { expenseId: this.state.selectedItemID })}>
                 <IconFeather>{this.iconEdit}</IconFeather>
               </TouchableOpacity>
               <TouchableOpacity
                 style={styles.spacing}
                 onPress={() => {
-                  alert('Are you sure?');
+                  //can add modal here to confirm delete
                   this.handleDelete();
                 }}>
                 <IconFeather>{this.iconTrash}</IconFeather>

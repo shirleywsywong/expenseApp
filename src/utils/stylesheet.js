@@ -4,6 +4,20 @@ const styles = StyleSheet.create({
   spacing: {
     margin: 20,
   },
+  subTitle: {
+    fontSize: 20,
+    textAlign: "center"
+  },
+  listText: {
+    fontSize: 20,
+    margin: 5,
+    padding: 10,
+    backgroundColor: "#ddd",
+    borderRadius: 5
+  },
+  regularFont: {
+    fontSize: 20
+  },
   title: {
     padding: 20,
     backgroundColor: '#eee',
@@ -34,7 +48,23 @@ const styles = StyleSheet.create({
   error: {
     color: '#af3b40',
     fontWeight: 'bold'
-  }
+  },
+  switch: {
+    borderRadius: 40,
+    borderWidth: 50,
+    borderColor: '#d6d7da',
+  },
+  iconGroup: {
+    flexDirection: 'row',
+    justifyContent: 'center',
+  },
+  checkboxLabel: {
+    padding: 5,
+  },
+  iconAddItem: {
+    height: 50,
+    width: 50,
+  },
 });
 
 export default styles;

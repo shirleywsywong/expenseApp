@@ -1,6 +1,5 @@
 const express = require("express");
 const expenseRouter = express.Router();
-const expenseData = require("../../expenseData")
 const Expense = require("./expenseModel");
 const { createExpense } = require("./expenseService")
 const { verifyToken } = require('../../middleware/verifyToken')
@@ -26,7 +25,7 @@ expenseRouter
   .post(async (req, res) => {
     const { date, itemDesc, amount } = req.body;
     console.log("expense server: ", req.body)
-
+    console.log("user: ", req.user)
     //if date is undefined, return an error
     if (!date) {
       res.status(400).json({ message: "Date is a required field" })
@@ -49,7 +48,8 @@ expenseRouter
     try {
 
       //need to grab the expense item from req.body, and the userID from req.headers. Since middleware already added user to request object, we can get it there.
-      //we need userID to identify whose the owner of the expense item in database. Make sure to add a new field to our Schema
+      //we need userID to identify whose the owner of the expense item in database. Make sure to add a new field to Schema
+
       const newExpense = await createExpense({
         date: date,
         itemDesc: itemDesc,

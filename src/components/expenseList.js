@@ -1,4 +1,4 @@
-import React, {Component} from 'react';
+import React, { Component } from 'react';
 import {
   SafeAreaView,
   StyleSheet,
@@ -11,36 +11,53 @@ import {
 } from 'react-native';
 import IconFeather from 'react-native-vector-icons/Feather';
 import IconMaterial from 'react-native-vector-icons/MaterialCommunityIcons';
+import styles from '../utils/stylesheet';
+import { getToken } from '../utils/token'
 
 class ExpenseList extends Component {
-  constructor({navigation}) {
+  constructor({ navigation }) {
     super();
     this.state = {
       expenseGroup: [],
     };
   }
 
-  DATA = [
-    {
-      id: 'bd7acbea-c1b1-46c2-aed5-3ad53abb28ba',
-      isSelected: true,
-      date: 'Feb 1, 2019',
-      name: 'Lunch',
-      amount: 15,
-    },
-    {
-      id: '3ac68afc-c605-48d3-a4f8-fbd91aa97f63',
-      isSelected: false,
-      date: 'Feb 7, 2019',
-      name: 'Go transit',
-      amount: 15,
-    },
-  ];
-
   iconAdd = (<IconFeather name="plus-square" size={50} color="#109" />);
   iconEdit = (<IconFeather name="edit" size={45} color="#109" />);
   iconTrash = (<IconFeather name="trash-2" size={45} color="#109" />);
   iconExport = (<IconMaterial name="export" size={50} color="#109" />);
+
+  componentDidMount() {
+    const unsubscribe = this.props.navigation.addListener('focus', () => {
+      this.getExpenseData()
+    });
+    return unsubscribe;
+  }
+
+  getExpenseData = async () => {
+    try {
+      const token = await getToken();
+      const response = await fetch('http://192.168.0.162:8000/expense/', {
+        headers: {
+          authorization: `Bearer ${token}`,
+        }
+      })
+      const data = await response.json();
+      console.log("expense list", data)
+      this.setState({ expenseGroup: data })
+    } catch (err) {
+      console.log(err)
+    }
+  }
+
+  renderListItem = (title) => {
+    console.log("render item: ", title)
+    return (
+      <View style={styles.listText}>
+        <Text style={styles.regularFont}>{title.item.itemDesc}</Text>
+      </View>
+    );
+  }
 
   toggleSelect = () => {
     //const expenseObj = {
@@ -81,10 +98,13 @@ class ExpenseList extends Component {
                 <IconMaterial>{this.iconExport}</IconMaterial>
               </TouchableOpacity>
             </View>
-            <Text>Add an expense item</Text>
-            <View style={styles.checkboxGroup}>
-              <Switch style={styles.switch} />
-              <Text style={styles.checkBoxLabel}>Expense Item</Text>
+            <View>
+              <Text style={styles.subTitle}>List of Expense Items</Text>
+              <FlatList
+                data={this.state.expenseGroup}
+                renderItem={this.renderListItem}
+                keyExtractor={item => item._id}
+              />
             </View>
           </View>
         </ScrollView>
@@ -93,32 +113,19 @@ class ExpenseList extends Component {
   }
 }
 
-const styles = StyleSheet.create({
-  spacing: {
-    margin: 10,
-  },
-  switch: {
-    borderRadius: 40,
-    borderWidth: 50,
-    borderColor: '#d6d7da',
-  },
-  TextInput: {
-    height: 40,
-    borderColor: 'gray',
-    borderWidth: 1,
-  },
-  iconGroup: {
-    margin: 20,
-    flexDirection: 'row',
-    padding: 10,
-  },
-  checkboxLabel: {
-    padding: 5,
-  },
-  iconAddItem: {
-    height: 50,
-    width: 50,
-  },
-});
-
+// {
+//   "index": 1,
+//     "item": {
+//     "__v": 0,
+//       "_id": "5e64040ed8c4592c68589393",
+//         "amount": "6",
+//           "date": "2020-03-01T05:00:00.000Z",
+//             "itemDesc": "katsu"
+//   },
+//   "separators": {
+//     "highlight": [Function highlight],
+//       "unhighlight": [Function unhighlight],
+//         "updateProps": [Function updateProps]
+//   }
+// }
 export default ExpenseList;

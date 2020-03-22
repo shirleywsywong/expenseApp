@@ -18,11 +18,6 @@ expenseRouter.route("/")
     }
   });
 
-// 1. to create an expense, need to :
-//- capture the details (date, desc, amount)
-//- assign expense to user
-//- ensure you are authenticated
-
 expenseRouter
   .route("/add-item")
   // add an expense item
@@ -77,10 +72,13 @@ expenseRouter
   })
   .put(async (req, res) => {
     try {
-      const itemToBeUpdated = await Expense.findById(req.params._id)
+      const itemToBeUpdated = await Expense.findOne({
+        _id: req.params._id,
+        userId: req.user.id
+      })
       res.json(await itemToBeUpdated.updateOne(req.body))
     } catch (err) {
-      throw err
+      res.status(500).json({ message: "Internal server error" })
     }
   })
   .delete(async (req, res) => {

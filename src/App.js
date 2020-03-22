@@ -16,15 +16,17 @@ import ExpenseList from './components/expenseList';
 import ExpenseItem from './components/expenseItem';
 import ExportCSV from './components/exportCSV';
 
-import { getToken } from './utils/token';
-
+console.disableYellowBox = true;
 
 const App = () => {
   const Stack = createStackNavigator();
   return (
     <NavigationContainer>
-      <Stack.Navigator initialRouteName="HomeScreen">
-        <Stack.Screen name="HomeScreen" component={Login} />
+      <Stack.Navigator initialRouteName="Welcome!"
+        screenOptions={{
+          headerShown: false
+        }}>
+        <Stack.Screen name="Welcome!" component={Login} />
         <Stack.Screen name="SignUp" component={SignUp} />
         <Stack.Screen name="ExpenseList" component={ExpenseList} />
         <Stack.Screen name="ExpenseItem" component={ExpenseItem} />

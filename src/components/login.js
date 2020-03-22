@@ -6,7 +6,7 @@ import {
   Text,
   Button,
   TextInput,
-  TouchableOpacity
+  KeyboardAvoidingView,
 } from 'react-native';
 import styles from '../utils/stylesheet'
 import { storeToken } from '../utils/token'
@@ -14,6 +14,7 @@ import { storeToken } from '../utils/token'
 //sameple users:
 //[hello, abc123]
 //[Q, Q]
+//[E, E]
 
 class Login extends Component {
   constructor(props) {
@@ -26,12 +27,10 @@ class Login extends Component {
   }
 
   enteringEmail = (text) => {
-    console.log(`user is entering email `, text)
     this.setState({ email: text })
   }
 
   enteringPassword = (text) => {
-    console.log(`user is entering password `, text)
     this.setState({ password: text })
   }
 
@@ -74,46 +73,49 @@ class Login extends Component {
     return (
       <SafeAreaView>
         <ScrollView contentInsetAdjustmentBehavior="automatic">
-          <View>
+          <KeyboardAvoidingView>
             <View style={styles.title}>
               <Text style={styles.appName}>Happy Reimbursary!</Text>
-              <Button
-                title="New user? Sign Up!"
-                onPress={() => this.props.navigation.navigate('SignUp')}
-              />
             </View>
             <View style={styles.spacing}>
               <View style={styles.spacing}>
-                <Text>Email:</Text>
+                <Text style={styles.regularFont}>Email:</Text>
                 <TextInput
                   style={styles.TextInput}
-                  autoFocus={true}
                   keyboardType={"email-address"}
                   onChangeText={(text) => this.enteringEmail(text)}
                 />
               </View>
               <View style={styles.spacing}>
-                <Text>Password:</Text>
+                <Text style={styles.regularFont}>Password:</Text>
                 <TextInput
                   style={styles.TextInput}
                   onChangeText={(text) => this.enteringPassword(text)}
                 />
               </View>
-              <Button
-                title="Sign in"
-                onPress={async () => {
-                  if (await this.submitFromButton()) {
-                    this.props.navigation.navigate('ExpenseList')
-                  }
-                }}
-              />
               <View style={styles.spacing}>
-                {this.state.error
-                  ? <Text style={styles.error}>{this.state.error}</Text>
-                  : null}
+                <View>
+                  {this.state.error
+                    ? <Text style={styles.error}>{this.state.error}</Text>
+                    : null}
+                </View>
+                <Button
+                  title="Sign in"
+                  onPress={async () => {
+                    if (await this.submitFromButton()) {
+                      this.props.navigation.navigate('ExpenseList')
+                    }
+                  }}
+                />
+              </View>
+              <View style={styles.spacing}>
+                <Button
+                  title="New user? Sign Up!"
+                  onPress={() => this.props.navigation.navigate('SignUp')}
+                />
               </View>
             </View>
-          </View>
+          </KeyboardAvoidingView>
         </ScrollView>
       </SafeAreaView>
     );

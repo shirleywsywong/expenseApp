@@ -4,7 +4,6 @@ import {
   ScrollView,
   View,
   Text,
-  StatusBar,
   Button,
   TextInput,
 } from 'react-native';
@@ -24,30 +23,25 @@ class expenseItem extends Component {
   }
 
   componentDidMount() {
-    console.log("component start to mount")
     //if we passed in an ID from expense list, get the existing ID
     if (this.props.route.params.expenseId) {
       this.setState({ existingItemId: this.props.route.params.expenseId })
-      console.log("componentDidMount: if expenseID is passed through props")
       this.getExisitingItem()
       return
     }
-    console.log("component finish mounting")
   }
 
+  //look into the database to get the data from the existing item ID
   getExisitingItem = async () => {
-    console.log("get existing item endpoint")
     const token = await getToken();
     try {
       const { existingItemId } = this.state
-      console.log("getExistingItem existingItemId: " + data)
       const response = await fetch(`http://192.168.0.162:8000/expense/${existingItemId}`, {
         headers: {
           authorization: `Bearer ${token}`,
         }
       })
       const data = await response.json();
-      console.log("getExistingItem data: " + data)
 
       if (!response.ok) {
         console.log(data)
@@ -55,9 +49,9 @@ class expenseItem extends Component {
       }
 
       const { amount, date, itemDesc } = data
-      this.setState({ amount, date, itemDesc })
-      console.log("got existing item from database: ", amount, date, itemDesc)
 
+      //populate existing item details to state to be rendered in UI
+      this.setState({ amount, date, itemDesc })
     } catch (err) {
       console.log(err)
       this.setState({ error: err.message })
@@ -70,8 +64,8 @@ class expenseItem extends Component {
     })
   }
 
+  //add an item to the database
   addItem = async () => {
-    console.log("adding item endpoint")
     const token = await getToken();
     try {
       const { date, itemDesc, amount } = this.state;
@@ -100,7 +94,7 @@ class expenseItem extends Component {
         console.log(data)
         throw new Error(data.message)
       }
-      console.log("adding item: ", amount, date, itemDesc)
+
       //if everything is ok and expense is added to database, go ahead to next screen
       return true;
     } catch (err) {
@@ -113,12 +107,11 @@ class expenseItem extends Component {
     //we've sent an expense to database, go to expenseRoutes to handle the request
   }
 
+  //edit an existing expense item
   editItem = async () => {
-    console.log("edit an existing item endpoint")
     const token = await getToken();
     try {
       const { existingItemId, date, itemDesc, amount } = this.state;
-      console.log("editItem: " + existingItemId)
 
       //make a put request to edit note endpoint
       const response = await fetch(`http://192.168.0.162:8000/expense/${existingItemId}`, {
@@ -133,15 +126,11 @@ class expenseItem extends Component {
       })
       const data = await response.json()
 
-
-      console.log("editing item: ", data)
-
       if (!response.ok) {
-
         throw new Error(data.message)
       }
 
-      //if everything is ok and expense is added to database, go ahead to next screen
+      //if everything is ok and expense is updated to database, go ahead to next screen
       return true;
     } catch (err) {
       console.log(err)
@@ -152,27 +141,28 @@ class expenseItem extends Component {
     }
   }
 
+  //what to do when submit button is pressed, and what to do after
   addOrEdit = async () => {
-    console.log("Are we adding or editing an item?")
     let shouldProceed = undefined;
     try {
+      //if we have an existing item, submit button is used to edit it
       if (this.state.existingItemId) {
-        console.log("We're editing an item")
         shouldProceed = await this.editItem()
       } else {
-        console.log("We're adding an item")
+        //if we don't have an existing item, submit button is used to add it
         shouldProceed = await this.addItem()
       }
+
+      //if add or edit is successful, go to the next screen
       if (shouldProceed) {
-        console.log("Go to the next screen")
         await this.props.navigation.navigate('ExpenseList')
       }
     }
     catch (err) {
+      //otherwise, return an error
       this.setState({ error: err.message })
     }
   }
-
 
   render() {
     return (
@@ -180,7 +170,7 @@ class expenseItem extends Component {
         <ScrollView contentInsetAdjustmentBehavior="automatic">
           <View style={styles.spacing}>
             <View style={styles.spacing}>
-              <Text>Date:</Text>
+              <Text style={styles.regularFont}>Date:</Text>
               <TextInput
                 style={styles.TextInput}
                 autoFocus={true}
@@ -189,7 +179,7 @@ class expenseItem extends Component {
               />
             </View>
             <View style={styles.spacing}>
-              <Text>Item Name:</Text>
+              <Text style={styles.regularFont}>Item Name:</Text>
               <TextInput
                 style={styles.TextInput}
                 onChangeText={(text) => this.enteringData("itemDesc", text)}
@@ -197,7 +187,7 @@ class expenseItem extends Component {
               />
             </View>
             <View style={styles.spacing}>
-              <Text>Amount</Text>
+              <Text style={styles.regularFont}>Amount</Text>
               <TextInput
                 placeholder={'$'}
                 keyboardType={'numeric'}
@@ -206,13 +196,13 @@ class expenseItem extends Component {
                 value={this.state.amount}
               />
             </View>
+            {this.state.error
+              ? <Text style={styles.error}>{this.state.error}</Text>
+              : null}
             <Button
               title="Submit"
               onPress={async () => await this.addOrEdit()}
             />
-            {this.state.error
-              ? <Text style={styles.error}>{this.state.error}</Text>
-              : null}
           </View>
         </ScrollView>
       </SafeAreaView>

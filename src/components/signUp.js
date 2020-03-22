@@ -35,7 +35,7 @@ class SignUp extends Component {
   submitFromButton = async () => {
     const { email, password } = this.state
     try {
-      const response = await fetch('http://192.168.0.162:8000/user/', {
+      const response = await fetch('https://happy-reimbursary.herokuapp.com/user/', {
         method: "POST",
         headers: {
           "Content-Type": "application/json",

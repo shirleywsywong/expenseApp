@@ -36,7 +36,7 @@ class expenseItem extends Component {
     const token = await getToken();
     try {
       const { existingItemId } = this.state
-      const response = await fetch(`http://192.168.0.162:8000/expense/${existingItemId}`, {
+      const response = await fetch(`https://happy-reimbursary.herokuapp.com/expense/${existingItemId}`, {
         headers: {
           authorization: `Bearer ${token}`,
         }
@@ -71,7 +71,7 @@ class expenseItem extends Component {
       const { date, itemDesc, amount } = this.state;
 
       //make a post request to add note endpoint
-      const response = await fetch('http://192.168.0.162:8000/expense/add-item', {
+      const response = await fetch('https://happy-reimbursary.herokuapp.com/expense/add-item', {
         method: "POST",
 
         //need to send token along in req.headers to let server know you're already authenticated
@@ -114,7 +114,7 @@ class expenseItem extends Component {
       const { existingItemId, date, itemDesc, amount } = this.state;
 
       //make a put request to edit note endpoint
-      const response = await fetch(`http://192.168.0.162:8000/expense/${existingItemId}`, {
+      const response = await fetch(`https://happy-reimbursary.herokuapp.com/expense/${existingItemId}`, {
         method: "PUT",
 
         //need to send token along in req.headers to let server know you're already authenticated

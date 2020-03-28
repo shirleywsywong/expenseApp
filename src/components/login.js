@@ -39,7 +39,7 @@ class Login extends Component {
       const { email, password } = this.state
 
       //make a post request to login endpoint
-      const response = await fetch('http://192.168.0.162:8000/user/login', {
+      const response = await fetch('https://happy-reimbursary.herokuapp.com/user/login', {
         method: "POST",
         headers: {
           "Content-Type": "application/json",

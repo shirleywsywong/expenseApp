@@ -59,7 +59,7 @@ class ExpenseList extends Component {
     this.setState({ token })
 
     try {
-      const response = await fetch('http://192.168.0.162:8000/expense/', {
+      const response = await fetch('https://happy-reimbursary.herokuapp.com/expense/', {
         headers: {
           authorization: `Bearer ${token}`,
         }
@@ -138,7 +138,7 @@ class ExpenseList extends Component {
       const { token, selectedItemID } = this.state;
 
       //make a delete request to delete note endpoint
-      const response = await fetch(`http://192.168.0.162:8000/expense/${selectedItemID}`, {
+      const response = await fetch(`https://happy-reimbursary.herokuapp.com/expense/${selectedItemID}`, {
         method: "DELETE",
 
         //need to send token along in req.headers to let server know you're already authenticated

@@ -59,3 +59,19 @@ buck-out/
 /ios/Pods/
 
 *.code-workspace
+
+ToDos:
+- verifying valid email address regex
+- datepicker library
+- heroku home page
+- build APK
+- token refresh:
+  - Make a wrapper around token storage functions. 
+  - When you receive a token from server, it usually includes refresh token and token lifetime too. Save that information together with when the token was obtained. 
+  - When you load a token, the wrapper should check if the token has already expired. Refresh if required. 
+  - If refresh doesn't work, show login screen
+
+Future development:
+- export CSV
+- add a category to each expense item, and be able to sort/filter
+- take a picture of the receipt and storing the photo in media storage
